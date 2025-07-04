@@ -8,7 +8,7 @@ const useNativeDriver = false; // because of RN #13377
 
 class Swiper extends React.Component {
   // children = (() => React.Children.toArray(this.props.children))();
-  count = (() => this.children.length)();
+  // count = (() => this.children.length)();
 
   startAutoplay() {
     const { timeout } = this.props;
@@ -246,6 +246,8 @@ class Swiper extends React.Component {
 
   render() {
     const childrenArray = React.Children.toArray(this.props.children);
+    const count = childrenArray.length;
+
     const { pan, x, y, width, height } = this.state;
 
     const {
@@ -275,7 +277,7 @@ class Swiper extends React.Component {
         >
           <Animated.View
             style={StyleSheet.flatten([
-              styles.swipeArea(vertical, this.count, width, height),
+              styles.swipeArea(vertical, count, width, height),
               swipeAreaStyle,
               {
                 transform: [{ translateX: pan.x }, { translateY: pan.y }],
@@ -300,10 +302,10 @@ class Swiper extends React.Component {
               {...controlsProps}
               theme={theme}
               vertical={vertical}
-              count={this.count}
+              count={count}
               activeIndex={this.getActiveIndex()}
               isFirst={!loop && !this.getActiveIndex()}
-              isLast={!loop && this.getActiveIndex() + 1 >= this.count}
+              isLast={!loop && this.getActiveIndex() + 1 >= count}
               goToPrev={this.goToPrev}
               goToNext={this.goToNext}
               goTo={this.goTo}
