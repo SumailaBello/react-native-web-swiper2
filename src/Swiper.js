@@ -211,43 +211,92 @@ class Swiper extends React.Component {
   }
 
   _changeIndex(delta = 1) {
-    const { loop, vertical } = this.props;
-    const { width, height, activeIndex } = this.state;
-    const count = React.Children.toArray(this.props.children).length;
+  const { loop, vertical } = this.props;
+  const { width, height, activeIndex } = this.state;
 
-    let toValue = { x: 0, y: 0 };
-    let skipChanges = !delta;
-    let calcDelta = delta;
+  const childrenArray = React.Children.toArray(this.props.children || []);
+  const count = childrenArray.length;
 
-    if (activeIndex <= 0 && delta < 0) {
-      skipChanges = !loop;
-      calcDelta = count + delta;
-    } else if (activeIndex + 1 >= count && delta > 0) {
-      skipChanges = !loop;
-      calcDelta = -1 * activeIndex + delta - 1;
-    }
+  let toValue = { x: 0, y: 0 };
+  let skipChanges = !delta;
+  let calcDelta = delta;
 
-    if (skipChanges) {
-      return this._spring(toValue);
-    }
-
-    this.stopAutoplay();
-
-    let index = activeIndex + calcDelta;
-    this.setState({ activeIndex: index });
-
-    if (!isNaN(calcDelta) && !isNaN(width) && !isNaN(height)) {
-      if (vertical) {
-        toValue.y = height * -1 * calcDelta;
-      } else {
-        toValue.x = width * (I18nManager.isRTL ? 1 : -1) * calcDelta;
-      }
-    }
-    this._spring(toValue);
-
-    this.startAutoplay();
-    this.props.onIndexChanged && this.props.onIndexChanged(index);
+  if (activeIndex <= 0 && delta < 0) {
+    skipChanges = !loop;
+    calcDelta = count + delta;
+  } else if (activeIndex + 1 >= count && delta > 0) {
+    skipChanges = !loop;
+    calcDelta = -1 * activeIndex + delta - 1;
   }
+
+  if (skipChanges) {
+    return this._spring(toValue);
+  }
+
+  if (
+    isNaN(calcDelta) ||
+    isNaN(width) || width === 0 ||
+    isNaN(height) || height === 0
+  ) {
+    return;
+  }
+
+  this.stopAutoplay();
+
+  const index = activeIndex + calcDelta;
+  this.setState({ activeIndex: index });
+
+  if (vertical) {
+    toValue.y = height * -1 * calcDelta;
+  } else {
+    toValue.x = width * (I18nManager.isRTL ? 1 : -1) * calcDelta;
+  }
+
+  this._spring(toValue);
+
+  this.startAutoplay();
+  this.props.onIndexChanged && this.props.onIndexChanged(index);
+}
+
+
+  // _changeIndex(delta = 1) {
+  //   const { loop, vertical } = this.props;
+  //   const { width, height, activeIndex } = this.state;
+  //   const count = React.Children.toArray(this.props.children).length;
+
+  //   let toValue = { x: 0, y: 0 };
+  //   let skipChanges = !delta;
+  //   let calcDelta = delta;
+
+  //   if (activeIndex <= 0 && delta < 0) {
+  //     skipChanges = !loop;
+  //     calcDelta = count + delta;
+  //   } else if (activeIndex + 1 >= count && delta > 0) {
+  //     skipChanges = !loop;
+  //     calcDelta = -1 * activeIndex + delta - 1;
+  //   }
+
+  //   if (skipChanges) {
+  //     return this._spring(toValue);
+  //   }
+
+  //   this.stopAutoplay();
+
+  //   let index = activeIndex + calcDelta;
+  //   this.setState({ activeIndex: index });
+
+  //   if (!isNaN(calcDelta) && !isNaN(width) && !isNaN(height)) {
+  //     if (vertical) {
+  //       toValue.y = height * -1 * calcDelta;
+  //     } else {
+  //       toValue.x = width * (I18nManager.isRTL ? 1 : -1) * calcDelta;
+  //     }
+  //   }
+  //   this._spring(toValue);
+
+  //   this.startAutoplay();
+  //   this.props.onIndexChanged && this.props.onIndexChanged(index);
+  // }
 
   // _onLayout({
   //   nativeEvent: {
