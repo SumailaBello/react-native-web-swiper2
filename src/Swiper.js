@@ -8,7 +8,6 @@ const useNativeDriver = false; // because of RN #13377
 
 class Swiper extends React.Component {
   // children = (() => React.Children.toArray(this.props.children))();
-  childrenArray = React.Children.toArray(this.props.children);
   count = (() => this.children.length)();
 
   startAutoplay() {
@@ -246,6 +245,7 @@ class Swiper extends React.Component {
   }
 
   render() {
+    const childrenArray = React.Children.toArray(this.props.children);
     const { pan, x, y, width, height } = this.state;
 
     const {
@@ -283,7 +283,7 @@ class Swiper extends React.Component {
             ])}
             {...this._panResponder.panHandlers}
           >
-            {this.childrenArray.map((el, i) => (
+            {childrenArray.map((el, i) => (
               <View
                 key={i}
                 style={StyleSheet.flatten([
