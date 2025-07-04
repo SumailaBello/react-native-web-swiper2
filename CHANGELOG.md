@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.1.4 — 2020-07-27 - DO NOT USE, use 2.1.6 and above instead
 
+- removed default props to fix console error
+
 ### Fixed
 
 - Correct `gestureEnabled` prop ([#1c2d448](https://github.com/reactrondev/react-native-web-swiper/commit/1c2d448b2b4d882d57bb2a08efdf8522cb917376))

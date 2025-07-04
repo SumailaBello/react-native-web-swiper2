@@ -1,5 +1,7 @@
 # react-native-web-swiper
 
+Forked from https://github.com/reactrondev/react-native-web-swiper.git. I believe this is the best and most lightweight swiper for ReactNative.
+
 Simple swiper / slider. Works both on React-Native and React-Native-Web.
 
 ## Demo
