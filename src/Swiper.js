@@ -96,7 +96,8 @@ class Swiper extends React.Component {
       y: 0,
       width: 0,
       height: 0,
-      activeIndex: props.from,
+      // activeIndex: props.from,
+      activeIndex: typeof props.from === 'number' ? props.from : 0,
       pan: new Animated.ValueXY(),
     };
 
@@ -212,6 +213,7 @@ class Swiper extends React.Component {
   _changeIndex(delta = 1) {
     const { loop, vertical } = this.props;
     const { width, height, activeIndex } = this.state;
+    const count = React.Children.toArray(this.props.children).length;
 
     let toValue = { x: 0, y: 0 };
     let skipChanges = !delta;
@@ -219,8 +221,8 @@ class Swiper extends React.Component {
 
     if (activeIndex <= 0 && delta < 0) {
       skipChanges = !loop;
-      calcDelta = this.count + delta;
-    } else if (activeIndex + 1 >= this.count && delta > 0) {
+      calcDelta = count + delta;
+    } else if (activeIndex + 1 >= count && delta > 0) {
       skipChanges = !loop;
       calcDelta = -1 * activeIndex + delta - 1;
     }
@@ -263,7 +265,7 @@ class Swiper extends React.Component {
   };
 
   render() {
-    const childrenArray = React.Children.toArray(this.props.children);
+    const childrenArray = React.Children.toArray(this.props.children || []);
     const count = childrenArray.length;
 
     const { pan, x, y, width, height } = this.state;
@@ -283,9 +285,16 @@ class Swiper extends React.Component {
     } = this.props;
 
     // prevent layout crash when dimensions are missing
-    if (!width || !height || !count) {
-      return null;
+    if (
+      isNaN(calcDelta) || 
+      isNaN(width) || 
+      isNaN(height) || 
+      width === 0 || 
+      height === 0
+    ) {
+      return;
     }
+
 
     return (
       <View
