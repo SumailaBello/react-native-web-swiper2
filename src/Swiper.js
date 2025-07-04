@@ -225,10 +225,12 @@ class Swiper extends React.Component {
     let index = activeIndex + calcDelta;
     this.setState({ activeIndex: index });
 
-    if (vertical) {
-      toValue.y = height * -1 * calcDelta;
-    } else {
-      toValue.x = width * (I18nManager.isRTL ? 1 : -1) * calcDelta;
+    if (!isNaN(calcDelta) && !isNaN(width) && !isNaN(height)) {
+      if (vertical) {
+        toValue.y = height * -1 * calcDelta;
+      } else {
+        toValue.x = width * (I18nManager.isRTL ? 1 : -1) * calcDelta;
+      }
     }
     this._spring(toValue);
 
@@ -263,6 +265,11 @@ class Swiper extends React.Component {
       controlsProps,
       Controls = DefaultControls,
     } = this.props;
+
+    // prevent layout crash when dimensions are missing
+    if (!width || !height || !count) {
+      return null;
+    }
 
     return (
       <View
