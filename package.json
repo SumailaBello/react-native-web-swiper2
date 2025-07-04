@@ -1,5 +1,5 @@
 {
-  "name": "react-native-web-swiper",
+  "name": "react-native-web-swiper2",
   "version": "2.2.4",
   "homepage": "https://github.com/reactrondev/react-native-web-swiper2#readme",
   "types": "./index.d.ts",
@@ -21,7 +21,8 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "react-native-reanimated": "^3.18.0"
   },
   "peerDependencies": {
     "react-native": "*"
