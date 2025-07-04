@@ -184,6 +184,15 @@ class Swiper extends React.Component {
   _fixState() {
     const { vertical } = this.props;
     const { width, height, activeIndex } = this.state;
+
+    if (
+      typeof width !== 'number' ||
+      typeof height !== 'number' ||
+      typeof activeIndex !== 'number'
+    ) {
+      return;
+    }
+
     this._animatedValueX = vertical ? 0 : width * activeIndex * (I18nManager.isRTL ? 1 : -1);
     this._animatedValueY = vertical ? height * activeIndex * -1 : 0;
     this.state.pan.setOffset({
@@ -238,13 +247,20 @@ class Swiper extends React.Component {
     this.props.onIndexChanged && this.props.onIndexChanged(index);
   }
 
-  _onLayout({
-    nativeEvent: {
-      layout: { x, y, width, height },
-    },
-  }) {
+  // _onLayout({
+  //   nativeEvent: {
+  //     layout: { x, y, width, height },
+  //   },
+  // }) {
+  //   this.setState({ x, y, width, height }, () => this._fixState());
+  // }
+
+  _onLayout = ({ nativeEvent: { layout } }) => {
+    const { width, height, x, y } = layout;
+    if (!width || !height) return;
+
     this.setState({ x, y, width, height }, () => this._fixState());
-  }
+  };
 
   render() {
     const childrenArray = React.Children.toArray(this.props.children);
